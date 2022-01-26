@@ -31,10 +31,13 @@ mycol = mydb["BSAface"]
 
 st.cache()
 def first_loading():
-    mydoc =list(mycol.find().sort('rep').limit(3))
+    mydoc =list(mycol.find().sort('rep').limit(4))
     data = pd.DataFrame(mydoc)
     image1 = data.iloc[0][1]
     image2 = data.iloc[rand][1]
+    if image1==image2:
+        image2=data.iloc[rand+1][1]
+
     try:
         score1= data.iloc[0]['note']
     except:
@@ -84,9 +87,9 @@ def get_image(image1,image2, score1, score2, rep1,rep2, win):
     if win ==2:
         #Faire le calcul des points
         expected1 = 1/(1+    pow(10,((int(score2)-int(score1))/400) ))
-        newscore1 = int(score1) + 32*(0-expected1)
+        newscore1 = int(score1) + 10*(0-expected1)
         expected2 = 1/(1+    pow(10,((int(score1)-int(score2))/400) ))
-        newscore2 = int(score2) + 32*(1-expected2)
+        newscore2 = int(score2) + 10*(1-expected2)
 
     print(expected1,expected2,newscore1,newscore2)
     newrep1 = rep1 + 1
@@ -112,6 +115,8 @@ def get_image(image1,image2, score1, score2, rep1,rep2, win):
         rep1= 0
 
     image2 = data.iloc[rand][1]
+    if image1==image2:
+        image2=data.iloc[rand+1][1]
         ### Note ###
     try:
         score2= data.iloc[0]['note']
@@ -123,7 +128,7 @@ def get_image(image1,image2, score1, score2, rep1,rep2, win):
     except:
         rep2= 0
     
-    print(image1, image2)
+    
 
     return (image1,image2, score1, score2, rep1,rep2)
 
@@ -145,6 +150,7 @@ if page == "Je classe":
 
         if st.button("This", 'click1'):
             image1, image2, score1 , score2, rep1,rep2= get_image(image1, image2, score1 , score2, rep1,rep2,win =1)
+            print(image1, image2)
         st.image(image1)
         
 
