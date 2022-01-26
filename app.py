@@ -90,8 +90,8 @@ def get_image(image1,image2, score1, score2, rep1,rep2, win):
     newrep2 = rep2 +1
     # Enregistrer les données 
     print(newscore2, image2)
-    # mycol.update_one({"X1":image1}, {"$set":{'note':newscore1,'rep':int(newrep1)}})
-    # mycol.update_one({"X1":image2}, {"$set":{'note':newscore2,'rep':int(newrep2)}})
+    mycol.update_one({"X1":image1}, {"$set":{'note':newscore1,'rep':int(newrep1)}})
+    mycol.update_one({"X1":image2}, {"$set":{'note':newscore2,'rep':int(newrep2)}})
     print("Updated")
     # Rechercher de nouvelles images
 
