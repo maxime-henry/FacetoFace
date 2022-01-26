@@ -13,12 +13,11 @@ st.set_page_config(
      layout="wide",
      initial_sidebar_state="expanded"
  )
- 
+
 user = st.secrets.db_connection.user
 pwd = st.secrets.db_connection.password
 host = "cluster0.vdgze"
 databaseName = "Faces"
-collectionName = "googleface"
 
 
 CONNECTION_STRING = f"mongodb+srv://{user}:{pwd}@{host}.mongodb.net/{databaseName}"
