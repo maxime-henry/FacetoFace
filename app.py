@@ -59,6 +59,12 @@ def first_loading():
 
     return (image1,image2, score1, score2, rep1,rep2)
 
+st.cache()
+def get_results():
+    mydoc =list(mycol.find())
+    data = pd.DataFrame(mydoc)
+    data.sort_values(by ='note', inplace=True, ascending=False)
+    return(data)
 
 
 image1, image2, score1 , score2, rep1,rep2 = first_loading()
@@ -122,27 +128,82 @@ def get_image(image1,image2, score1, score2, rep1,rep2, win):
     return (image1,image2, score1, score2, rep1,rep2)
 
 
-st.title("Hey ! Tu préfères qui ?")
 
 
-col1, col2 = st.columns(2)
 
-with col1 :
-    col1.subheader("Image 1")
+# Create a page dropdown 
+page = st.sidebar.selectbox("Tu veux faire quoi ?", ["Je classe", "Je juge"]) 
+
+if page == "Je classe":
+
+    st.title("Hey ! Tu préfères qui ?")
+    col1, col2 = st.columns(2)
+
+    with col1 :
+        col1.subheader("Image 1")
 
 
-    if st.button("This", 'click1'):
-        image1, image2, score1 , score2, rep1,rep2= get_image(image1, image2, score1 , score2, rep1,rep2,win =1)
-    st.image(image1)
-    
+        if st.button("This", 'click1'):
+            image1, image2, score1 , score2, rep1,rep2= get_image(image1, image2, score1 , score2, rep1,rep2,win =1)
+        st.image(image1)
+        
 
 
-with col2:
-    col2.subheader("Image 2")
+    with col2:
+        col2.subheader("Image 2")
 
-    if st.button("This", 'click2'):
-        image1, image2,score1, score2,rep1,rep2 = get_image(image1, image2, score1 , score2, rep1,rep2,win =2)
-    st.image(image2)
+        if st.button("This", 'click2'):
+            image1, image2,score1, score2,rep1,rep2 = get_image(image1, image2, score1 , score2, rep1,rep2,win =2)
+        st.image(image2)
 
+if  page == "Je juge":
+
+
+    data = get_results()
+
+
+
+    # st.table(data[['X1','note']]) 
+    st.title("Les gagnants")
+    col1, col2, col3 = st.columns(3)
+
+
+
+    with col1:
+        st.header("Deuxième")
+        st.header("")
+        st.image(data.iloc[1][1])
+
+    with col2:
+        st.header("Premier")
+        st.image(data.iloc[0][1])
+        
+
+    with col3:
+        st.header("Troisième")
+        st.header("")
+        st.header("")
+        st.image(data.iloc[2][1])
+
+    st.title("Les nullos")
+
+    # data = data.sort_values(by ='note', inplace=True, ascending=True)
+
+    col1, col2, col3 = st.columns(3)
+    with col1:
+        st.header("Deuxième nullos")
+        st.header("")
+        st.image(data.iloc[-2][1])
+
+    with col2:
+        st.header("Premier nullos")
+        st.image(data.iloc[-1][1])
+        
+
+    with col3:
+        st.header("Troisième nullos")
+        st.header("")
+        st.header("")
+        st.image(data.iloc[-3][1])
 
 
