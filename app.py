@@ -29,7 +29,7 @@ mydb = client["Faces"]
 mycol = mydb["BSAface"]
 
 
-st.cache(max_entries=2)
+st.cache()
 def first_loading():
     mydoc =list(mycol.find().sort('rep').limit(3))
     data = pd.DataFrame(mydoc)
@@ -71,7 +71,7 @@ image1, image2, score1 , score2, rep1,rep2 = first_loading()
 
 #########################################
 
-st.cache(max_entries=2)
+st.cache()
 def get_image(image1,image2, score1, score2, rep1,rep2, win):
     if win ==1 :
         #Faire le calcul des points
