@@ -63,7 +63,7 @@ pure-eval==0.2.2
 pyarrow==6.0.1
 pycparser==2.21
 pydeck==0.7.1
-
+pymongo ==
 requests==2.27.1
 
 streamlit==1.4.0
