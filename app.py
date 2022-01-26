@@ -51,12 +51,12 @@ def first_loading():
     
         ### Note ###
     try:
-        score2= data.iloc[0]['note']
+        score2= data.iloc[rand+1]['note']
     except:
         score2= 400
         ### REP ###  
     try:
-        rep2= data.iloc[0]['rep']
+        rep2= data.iloc[rand+1]['rep']
     except:
         rep2= 0
 
@@ -78,6 +78,8 @@ st.cache()
 def get_image(image1,image2, score1, score2, rep1,rep2, win):
     if win ==1 :
         #Faire le calcul des points
+        print("#################", score1, score2)
+
         expected1 = 1/(1+    pow(10,((int(score2)-int(score1))/400) ))
         newscore1 = int(score1) + 32*(1-expected1)
         expected2 = 1/(1+    pow(10,((int(score1)-int(score2))/400) ))
@@ -90,6 +92,8 @@ def get_image(image1,image2, score1, score2, rep1,rep2, win):
         newscore1 = int(score1) + 10*(0-expected1)
         expected2 = 1/(1+    pow(10,((int(score1)-int(score2))/400) ))
         newscore2 = int(score2) + 10*(1-expected2)
+
+    print(       pow(10,((int(score2)-int(score1))/400))         )
 
     print(expected1,expected2,newscore1,newscore2)
     newrep1 = rep1 + 1
@@ -119,12 +123,12 @@ def get_image(image1,image2, score1, score2, rep1,rep2, win):
         image2=data.iloc[rand+1][1]
         ### Note ###
     try:
-        score2= data.iloc[0]['note']
+        score2= data.iloc[rand+1]['note']
     except:
         score2= 400
         ### REP ###  
     try:
-        rep2= data.iloc[0]['rep']
+        rep2= data.iloc[rand+1]['rep']
     except:
         rep2= 0
     
