@@ -1,3 +1,4 @@
+from cmath import nan
 import streamlit as st
 from pymongo import MongoClient
 import pandas as pd
@@ -55,6 +56,7 @@ def first_loading():
         rep2= data.iloc[0]['rep']
     except:
         rep2= 0
+
     return (image1,image2, score1, score2, rep1,rep2)
 
 
@@ -67,18 +69,18 @@ st.cache(max_entries=2)
 def get_image(image1,image2, score1, score2, rep1,rep2, win):
     if win ==1 :
         #Faire le calcul des points
-        expected1 = 1/(1+    pow(10,((score2-score1)/400) ))
-        newscore1 = score1 + 32*(1-expected1)
-        expected2 = 1/(1+    pow(10,((score1-score2)/400) ))
-        newscore2 = score2 + 32*(0-expected2)
+        expected1 = 1/(1+    pow(10,((int(score2)-int(score1))/400) ))
+        newscore1 = int(score1) + 32*(1-expected1)
+        expected2 = 1/(1+    pow(10,((int(score1)-int(score2))/400) ))
+        newscore2 = int(score2) + 32*(0-expected2)
 
 #########################################################################
     if win ==2:
         #Faire le calcul des points
-        expected1 = 1/(1+    pow(10,((score2-score1)/400) ))
-        newscore1 = score1 + 32*(0-expected1)
-        expected2 = 1/(1+    pow(10,((score1-score2)/400) ))
-        newscore2 = score2 + 32*(1-expected2)
+        expected1 = 1/(1+    pow(10,((int(score2)-int(score1))/400) ))
+        newscore1 = int(score1) + 32*(0-expected1)
+        expected2 = 1/(1+    pow(10,((int(score1)-int(score2))/400) ))
+        newscore2 = int(score2) + 32*(1-expected2)
 
     print(expected1,expected2,newscore1,newscore2)
     newrep1 = rep1 + 1
@@ -114,7 +116,9 @@ def get_image(image1,image2, score1, score2, rep1,rep2, win):
         rep2= data.iloc[0]['rep']
     except:
         rep2= 0
+    
     print(image1, image2)
+
     return (image1,image2, score1, score2, rep1,rep2)
 
 
@@ -125,12 +129,8 @@ col1, col2 = st.columns(2)
 
 with col1 :
     col1.subheader("Image 1")
-    # picture = st.camera_input("Take a picture")
 
-    # if picture:
-    #     st.image(picture)
-    # st.write(score1)
-    # st.write("rep",rep1)
+
     if st.button("This", 'click1'):
         image1, image2, score1 , score2, rep1,rep2= get_image(image1, image2, score1 , score2, rep1,rep2,win =1)
     st.image(image1)
@@ -139,8 +139,7 @@ with col1 :
 
 with col2:
     col2.subheader("Image 2")
-    # st.write(score2)
-    # st.write('rep',rep2)
+
     if st.button("This", 'click2'):
         image1, image2,score1, score2,rep1,rep2 = get_image(image1, image2, score1 , score2, rep1,rep2,win =2)
     st.image(image2)
