@@ -30,35 +30,23 @@ mycol = mydb["BSAface"]
 
 
 st.cache()
-def first_loading():
+def images():
     mydoc =list(mycol.find().sort('rep').limit(4))
     data = pd.DataFrame(mydoc)
     image1 = data.iloc[0][1]
-    image2 = data.iloc[rand][1]
-    if image1==image2:
-        image2=data.iloc[rand+1][1]
-
-    try:
-        score1= data.iloc[0]['note']
-    except:
-        score1= 400
-        ### REP 1 ###  
-    try:
-        rep1= data.iloc[0]['rep']
-    except:
-        rep1= 0
 
     
-        ### Note ###
-    try:
-        score2= data.iloc[rand+1]['note']
-    except:
-        score2= 400
-        ### REP ###  
-    try:
-        rep2= data.iloc[rand+1]['rep']
-    except:
-        rep2= 0
+
+    score1= data.iloc[0]['note']
+
+ 
+    rep1= data.iloc[0]['rep']
+
+    image2 = data.iloc[rand][1]
+    score2= data.iloc[rand]['note']
+
+    rep2= data.iloc[rand]['rep']
+
 
     return (image1,image2, score1, score2, rep1,rep2)
 
@@ -70,16 +58,14 @@ def get_results():
     return(data)
 
 
-image1, image2, score1 , score2, rep1,rep2 = first_loading()
+
 
 #########################################
 
 st.cache()
-def get_image(image1,image2, score1, score2, rep1,rep2, win):
+def scoring(image1,image2, score1, score2, rep1,rep2, win):
     if win ==1 :
         #Faire le calcul des points
-        print("#################", score1, score2)
-
         expected1 = 1/(1+    pow(10,((int(score2)-int(score1))/400) ))
         newscore1 = int(score1) + 32*(1-expected1)
         expected2 = 1/(1+    pow(10,((int(score1)-int(score2))/400) ))
@@ -93,8 +79,6 @@ def get_image(image1,image2, score1, score2, rep1,rep2, win):
         expected2 = 1/(1+    pow(10,((int(score1)-int(score2))/400) ))
         newscore2 = int(score2) + 10*(1-expected2)
 
-    print(       pow(10,((int(score2)-int(score1))/400))         )
-
     print(expected1,expected2,newscore1,newscore2)
     newrep1 = rep1 + 1
     newrep2 = rep2 +1
@@ -102,43 +86,12 @@ def get_image(image1,image2, score1, score2, rep1,rep2, win):
     print(newscore2, image2)
     mycol.update_one({"X1":image1}, {"$set":{'note':newscore1,'rep':int(newrep1)}})
     mycol.update_one({"X1":image2}, {"$set":{'note':newscore2,'rep':int(newrep2)}})
-    print("Updated")
-    # Rechercher de nouvelles images
-
-    mydoc = list(mycol.find().sort('rep').limit(3))
-    data = pd.DataFrame(mydoc)
-    image1 = data.iloc[0][1]
-    try:
-        score1= data.iloc[0]['note']
-    except:
-        score1= 400
-        ### REP 1 ###  
-    try:
-        rep1= data.iloc[0]['rep']
-    except:
-        rep1= 0
-
-    image2 = data.iloc[rand][1]
-    if image1==image2:
-        image2=data.iloc[rand+1][1]
-        ### Note ###
-    try:
-        score2= data.iloc[rand+1]['note']
-    except:
-        score2= 400
-        ### REP ###  
-    try:
-        rep2= data.iloc[rand+1]['rep']
-    except:
-        rep2= 0
-    
-    
-
-    return (image1,image2, score1, score2, rep1,rep2)
+    print("Updated" , image1, "with ", newscore1)
+    return ()
 
 
 
-
+image1, image2, score1 , score2, rep1,rep2 = images()
 
 # Create a page dropdown 
 page = st.sidebar.selectbox("Tu veux faire quoi ?", ["Je classe", "Je juge"]) 
@@ -151,10 +104,9 @@ if page == "Je classe":
     with col1 :
         col1.subheader("Image 1")
 
-
         if st.button("This", 'click1'):
-            image1, image2, score1 , score2, rep1,rep2= get_image(image1, image2, score1 , score2, rep1,rep2,win =1)
-            print(image1, image2)
+            scoring(image1, image2, score1 , score2, rep1,rep2,win =1)
+  
         st.image(image1)
         
 
@@ -163,7 +115,9 @@ if page == "Je classe":
         col2.subheader("Image 2")
 
         if st.button("This", 'click2'):
-            image1, image2,score1, score2,rep1,rep2 = get_image(image1, image2, score1 , score2, rep1,rep2,win =2)
+            scoring(image1, image2, score1 , score2, rep1,rep2,win =2)
+        print(image1, image2)
+
         st.image(image2)
 
 if  page == "Je juge":
