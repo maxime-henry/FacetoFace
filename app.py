@@ -4,7 +4,7 @@ from pymongo import MongoClient
 import pandas as pd
 import random 
 
-rand = random.randint(1,2)
+rand = random.randint(1,8)
 
 
 
@@ -31,7 +31,7 @@ mycol = mydb["BSAface"]
 
 st.cache()
 def images():
-    mydoc =list(mycol.find().sort('rep').limit(4))
+    mydoc =list(mycol.find().sort('rep').limit(10))
     data = pd.DataFrame(mydoc)
     image1 = data.iloc[0][1]
 
@@ -105,8 +105,9 @@ if page == "Je classe":
         col1.subheader("Image 1")
 
         if st.button("This", 'click1'):
+
             scoring(image1, image2, score1 , score2, rep1,rep2,win =1)
-  
+        st.write(score1)
         st.image(image1)
         
 
@@ -116,23 +117,14 @@ if page == "Je classe":
 
         if st.button("This", 'click2'):
             scoring(image1, image2, score1 , score2, rep1,rep2,win =2)
-        print(image1, image2)
-
+        st.write(score2)
         st.image(image2)
 
 if  page == "Je juge":
-
-
     data = get_results()
-
-
-
     # st.table(data[['X1','note']]) 
     st.title("Les gagnants")
     col1, col2, col3 = st.columns(3)
-
-
-
     with col1:
         st.header("Deuxième")
         st.header("")
@@ -141,33 +133,31 @@ if  page == "Je juge":
     with col2:
         st.header("Premier")
         st.image(data.iloc[0][1])
-        
-
     with col3:
         st.header("Troisième")
         st.header("")
         st.header("")
         st.image(data.iloc[2][1])
 
-    st.title("Les nullos")
+    # st.title("Les nullos")
 
-    # data = data.sort_values(by ='note', inplace=True, ascending=True)
+    # # data = data.sort_values(by ='note', inplace=True, ascending=True)
 
-    col1, col2, col3 = st.columns(3)
-    with col1:
-        st.header("Deuxième nullos")
-        st.header("")
-        st.image(data.iloc[-2][1])
+    # col1, col2, col3 = st.columns(3)
+    # with col1:
+    #     st.header("Deuxième nullos")
+    #     st.header("")
+    #     st.image(data.iloc[-2][1])
 
-    with col2:
-        st.header("Premier nullos")
-        st.image(data.iloc[-1][1])
+    # with col2:
+    #     st.header("Premier nullos")
+    #     st.image(data.iloc[-1][1])
         
 
-    with col3:
-        st.header("Troisième nullos")
-        st.header("")
-        st.header("")
-        st.image(data.iloc[-3][1])
+    # with col3:
+    #     st.header("Troisième nullos")
+    #     st.header("")
+    #     st.header("")
+    #     st.image(data.iloc[-3][1])
 
 
